@@ -1,6 +1,9 @@
 services:
-  app:
+  dev:
     build:
       context: .
     volumes:
       - ./:/usr/rc/app
+  release:
+    build:
+      context: .

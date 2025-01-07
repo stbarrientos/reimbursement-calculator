@@ -2,6 +2,17 @@
 
 A simple reimbursement calculator algorithm.
 
+### Running the project
+This project can be run from any ruby 3.4.1 development environment. Simply run:
+`ruby main.rb`
+from the project root.
+
+If you don't have a local ruby development environment, you can run the project interactively via:
+`docker compose run -it dev bash`
+
+To run the project non-interactively (if you just want to see the final results) run:
+`docker compose run release`
+
 ### The Client Requests
 
 SamCorp has requested some simple software to calculate reimbursement based on some simple rules.
