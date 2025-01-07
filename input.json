@@ -1,0 +1,91 @@
+{
+  "sets": [
+    {
+      "name": "Set 1",
+      "projects": [
+        {
+          "name": "Project 1",
+          "city": "Low Cost City",
+          "start_date": "9/1/15",
+          "end_date": "9/3/15"
+        }
+
+      ]
+    },
+    {
+      "name": "Set 2",
+      "projects": [
+        {
+          "name": "Project 1",
+          "city": "Low Cost City",
+          "start_date": "9/1/15",
+          "end_date": "9/1/15"
+        },
+        {
+          "name": "Project 2",
+          "city": "High Cost City",
+          "start_date": "9/2/15",
+          "end_date": "9/6/15"
+        },
+        {
+          "name": "Project 3",
+          "city": "Low Cost City",
+          "start_date": "9/6/15",
+          "end_date": "9/8/15"
+        }
+      ]
+    },
+    {
+      "name": "Set 3",
+      "projects": [
+        {
+          "name": "Project 1",
+          "city": "Low Cost City",
+          "start_date": "9/1/15",
+          "end_date": "9/3/15"
+        },
+        {
+          "name": "Project 2",
+          "city": "High Cost City",
+          "start_date": "9/5/15",
+          "end_date": "9/7/15"
+        },
+        {
+          "name": "Project 3",
+          "city": "High Cost City",
+          "start_date": "9/8/15",
+          "end_date": "9/8/15"
+        }
+      ]
+    },
+    {
+      "name": "Set 4",
+      "projects": [
+        {
+          "name": "Project 1",
+          "city": "Low Cost City",
+          "start_date": "9/1/15",
+          "end_date": "9/1/15"
+        },
+        {
+          "name": "Project 2",
+          "city": "Low Cost City",
+          "start_date": "9/1/15",
+          "end_date": "9/1/15"
+        },
+        {
+          "name": "Project 3",
+          "city": "High Cost City",
+          "start_date": "9/2/15",
+          "end_date": "9/2/15"
+        },
+        {
+          "name": "Project 4",
+          "city": "High Cost City",
+          "start_date": "9/2/15",
+          "end_date": "9/3/15"
+        }
+      ]
+    }
+  ]
+}
