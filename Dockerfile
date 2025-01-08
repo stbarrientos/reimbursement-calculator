@@ -1,11 +1,9 @@
-FROM ruby:3.4.1 as base
+FROM ruby:3.4.1 AS dev
 
-WORKDIR /src/rc/app
+WORKDIR /usr/rc/app
 
-ENTRYPOINT ["ruby", "main.rb"]
+FROM dev AS release
 
-FROM base AS release
-
-COPY ./ /src/rc/app/
+COPY ./ /usr/rc/app/
 
 ENTRYPOINT ["ruby", "main.rb"]

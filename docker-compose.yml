@@ -2,8 +2,10 @@ services:
   dev:
     build:
       context: .
+      target: dev
     volumes:
       - ./:/usr/rc/app
   release:
     build:
       context: .
+      target: release
