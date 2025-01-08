@@ -3,15 +3,21 @@
 A simple reimbursement calculator algorithm.
 
 ### Running the project
-This project can be run from any ruby 3.4.1 development environment. Simply run:
+This project can be run from any ruby 3.4.1 (untested in other versions) development environment. Simply run:
 `ruby main.rb`
 from the project root.
 
-If you don't have a local ruby development environment, you can run the project interactively via:
+To run the project in a container (requires Docker) run:
+`docker compose run release`
+
+To run the project interatively if you don't have a local ruby development environment:
 `docker compose run -it dev bash`
 
-To run the project non-interactively (if you just want to see the final results) run:
-`docker compose run release`
+### Quick Directory Overview
+The code lives primarily in `src`. All of the classes and logic live there.
+You'll find `main.rb` in the root directory, this is "executable" for the project, and the only file meant to be called directly.
+You can find the tests in the `tests` directory.
+The `input.json` file is used by `main.rb` right now for the sake of simplicity. This file contains a sample input for the executable to operate on.
 
 ### The Client Requests
 
@@ -38,3 +44,4 @@ SamCorp has requested some simple software to calculate reimbursement based on s
 - Projects will be given as JSON (see input.json for format)
 - All cities will be either "High Cost City" or "Low Cost City"
 - When 2 projects in different city types occur on the same day, we will use the High Cost City rate
+- Single day duration projects will use the full day rate
