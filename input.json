@@ -6,8 +6,8 @@
         {
           "name": "Project 1",
           "city": "Low Cost City",
-          "start_date": "9/1/15",
-          "end_date": "9/3/15"
+          "start_date": "9/1/2015",
+          "end_date": "9/3/2015"
         }
 
       ]
@@ -18,20 +18,20 @@
         {
           "name": "Project 1",
           "city": "Low Cost City",
-          "start_date": "9/1/15",
-          "end_date": "9/1/15"
+          "start_date": "9/1/2015",
+          "end_date": "9/1/2015"
         },
         {
           "name": "Project 2",
           "city": "High Cost City",
-          "start_date": "9/2/15",
-          "end_date": "9/6/15"
+          "start_date": "9/2/2015",
+          "end_date": "9/6/2015"
         },
         {
           "name": "Project 3",
           "city": "Low Cost City",
-          "start_date": "9/6/15",
-          "end_date": "9/8/15"
+          "start_date": "9/6/2015",
+          "end_date": "9/8/2015"
         }
       ]
     },
@@ -41,20 +41,20 @@
         {
           "name": "Project 1",
           "city": "Low Cost City",
-          "start_date": "9/1/15",
-          "end_date": "9/3/15"
+          "start_date": "9/1/2015",
+          "end_date": "9/3/2015"
         },
         {
           "name": "Project 2",
           "city": "High Cost City",
-          "start_date": "9/5/15",
-          "end_date": "9/7/15"
+          "start_date": "9/5/2015",
+          "end_date": "9/7/2015"
         },
         {
           "name": "Project 3",
           "city": "High Cost City",
-          "start_date": "9/8/15",
-          "end_date": "9/8/15"
+          "start_date": "9/8/2015",
+          "end_date": "9/8/2015"
         }
       ]
     },
@@ -64,26 +64,26 @@
         {
           "name": "Project 1",
           "city": "Low Cost City",
-          "start_date": "9/1/15",
-          "end_date": "9/1/15"
+          "start_date": "9/1/2015",
+          "end_date": "9/1/2015"
         },
         {
           "name": "Project 2",
           "city": "Low Cost City",
-          "start_date": "9/1/15",
-          "end_date": "9/1/15"
+          "start_date": "9/1/2015",
+          "end_date": "9/1/2015"
         },
         {
           "name": "Project 3",
           "city": "High Cost City",
-          "start_date": "9/2/15",
-          "end_date": "9/2/15"
+          "start_date": "9/2/2015",
+          "end_date": "9/2/2015"
         },
         {
           "name": "Project 4",
           "city": "High Cost City",
-          "start_date": "9/2/15",
-          "end_date": "9/3/15"
+          "start_date": "9/2/2015",
+          "end_date": "9/3/2015"
         }
       ]
     }

@@ -12,7 +12,8 @@ class Project
   attr_reader :start_date, :end_date, :duration, :city_type
 
   def self.from_hash(hash)
-    new(**hash)
+    # Avoiding splatting the hash into keyword args for now
+    new(start_date: hash['start_date'], end_date: hash['end_date'], city_type: hash['city'])
   end
 
   def initialize(start_date:, end_date:, city_type:)
@@ -22,45 +23,41 @@ class Project
     @duration = calculate_duration
   end
 
-  def travel_day_count
-    # The first and last day of a project are always travel days. However, a project can be only 1 day long
-    if duration > 2
-      2
-    else
-      duration
-    end
+  def contains_date?(date)
+    start_date <= date && end_date >= date
   end
 
-  def full_day_count
-    full_days = duration - travel_day_count
-    if full_days > 0
-      full_days
-    else
-      0
-    end
+  def is_full_day?(date)
+    return false unless contains_date?(date)
+
+    # If the duration of the project is only one day, then that day is a full day
+    return true if duration == 1
+
+    date != start_date && date != end_date
   end
 
-  def overlaps?(other_project)
-    # If the other project ends after ours starts, that's an overlap
-    return true if start_date >= other_project.end_date
-
-    # If the other project starts before ours ends, that's an overlap
-    return true if end_date >= other_project.start_date
-
-    false
+  def is_travel_day?(date)
+    return false unless contains_date?(date)
+    !is_full_day?(date)
   end
 
   def is_high_cost_city?
     @city_type == HIGH_COST_CITY_TYPE
   end
 
-  def is_low_cost_city?
-    @city_type == LOW_COST_CITY_TYPE
-  end
-
-  # For easier sorting
-  def <=>(other_project)
-    start_date <=> other_project.start_date
+  # This method is used to calculate the rate for a single project on a given day.
+  # NOTE: This method does not attempt to return the final rate for a project in the context of a set.
+  # See ProjectSet#calculate_total_cost for the logic used to calculate project set total
+  def solo_rate(date)
+    if is_full_day?(date)
+      is_high_cost_city? ? HIGH_COST_CITY_FULL_DAY_RATE : LOW_COST_CITY_FULL_DAY_RATE
+    elsif is_travel_day?(date)
+      is_high_cost_city? ? HIGH_COST_CITY_TRAVEL_DAY_RATE : LOW_COST_CITY_TRAVEL_DAY_RATE
+    else
+      # This final condition will only be hit if we attempt to calculate the solo rate for a date outside of
+      # the project's duration. This should never happen.
+      0
+    end
   end
 
   private
