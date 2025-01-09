@@ -28,6 +28,15 @@ ts.test "Project contains_date? can correctly determine if a date is within the 
   )
 end
 
+ts.test "Project each_date correctly iterates over all dates in the project" do
+  proj = Project.new(start_date: '9/1/2025', end_date: '9/3/2025', city_type: 'High Cost City')
+  dates = []
+  proj.each_date do |date|
+    dates << date.strftime('%m/%d/%Y')
+  end
+  dates == ['09/01/2025', '09/02/2025', '09/03/2025']
+end
+
 ts.test "Project is_full_day? can correctly determine if a date is a full day" do
   proj = Project.new(start_date: '9/1/2025', end_date: '9/3/2025', city_type: 'High Cost City')
   (
