@@ -13,37 +13,30 @@ class ProjectSet
     @projects = projects
   end
 
-
-  # Calculate the total cost of the project set.
-  # We are doing this in the scope of the set instead of the individual projects because
-  # the individual projects do not know their siblings
-  def calculate_total_cost
+  def calculate_total_reimbursement
     reimbursement_total = 0
 
-    # We'll create a range of days for the project set
-    set_duration = last_project_set_date - first_project_set_date
+    dates = generate_dates_array
+    dates.each_with_index do |date_project_ids, date_index|
+      # In the case of a gap between projects, there will be no project ids for the date
+      next unless date_project_ids&.any?
 
-    # Going through each day in the range, we'll determine which rate applies
-    (set_duration.to_i + 1).times do |day_offset|
-      current_date = first_project_set_date + day_offset
-
-      # Find all projects that have the current date in their duration
-      applicable_projects = projects.select { |project| project.contains_date?(current_date) }
-
-      # If there are no applicable projects, there is no rate for the day
-      next if applicable_projects.empty?
-
-      daily_total = if applicable_projects.length == 1
-                      calculate_single_project_rate(applicable_projects.first, current_date)
-                    else
-                      calculate_multi_project_rate(applicable_projects, current_date)
-                    end
+      # Determine the rate for the day based on if there are multiple projects on the same day.
+      # This represents and "overlap"
+      daily_total =
+        if date_project_ids.length == 1
+          calculate_single_project_rate(date_project_ids.first, dates, date_index)
+        else
+          calculate_multi_project_rate(date_project_ids)
+        end
 
       reimbursement_total += daily_total
     end
 
     reimbursement_total
   end
+
+  private
 
   # Start date of the first project
   def first_project_set_date
@@ -55,20 +48,43 @@ class ProjectSet
     @last_project_set_date ||= projects.map(&:end_date).max
   end
 
-  private
+  # Create a simple index for projects to avoid a bloat in #generate_dates_array
+  def project_index
+    @project_index ||= projects.reduce({}) do |lookup, project|
+      lookup.merge(project.object_id => project)
+    end
+  end
 
-  def calculate_single_project_rate(project, date)
+  # Create an array that contains project ids for each date in the project set duration.
+  # This is done for performance, to avoid redundant date calculations as in my initial
+  # implementation
+  def generate_dates_array
+    dates = []
+    set_duration = last_project_set_date - first_project_set_date
+    projects.each do |project|
+      project.each_date do |date|
+        index = date - first_project_set_date
+        # puts "Generating date #{date} for project #{project} (#{index})"
+        dates[index] ||= []
+        dates[index] << project.object_id
+      end
+    end
+    dates
+  end
+
+  # Given a date and a project id, calculate the rate for the project on that day.
+  # This method accounts for neighboring projects.
+  def calculate_single_project_rate(project_id, dates, date_index)
+    # Retrieve the project from our index
+    project = project_index[project_id]
+
+    date = first_project_set_date + date_index
+
     # If the current day is a full day, we don't need to check for date neighbors
     return project.solo_rate(date) if project.is_full_day?(date)
 
-    # Determine whether or not we have any date neighbors
-    has_neighbors = self.projects.any? do |other_project|
-      # We are relying on ruby object id comparison here. Ideally, this would be a stored primary
-      # key, but for now this will work.
-      next if other_project == project
-
-      other_project.contains_date?(date - 1) || other_project.contains_date?(date + 1)
-    end
+    # Check the previous and next dates for any projects (excluding_self)
+    has_neighbors = find_date_neighbors(project_id, dates, date_index).any?
 
     # If we don't have date neighbors, we can use the project's solo rate
     return project.solo_rate(date) unless has_neighbors
@@ -79,10 +95,26 @@ class ProjectSet
     else
       Project::LOW_COST_CITY_FULL_DAY_RATE
     end
-    
   end
 
-  def calculate_multi_project_rate(projects, date)
+  def find_date_neighbors(project_id, dates, date_index)
+    # We have to check to make sure we don't go out of bounds
+    neighbors =
+      if date_index == 0
+        dates[date_index + 1] || []
+      elsif date_index == dates.length - 1
+        dates[date_index - 1] || []
+      else
+        (dates[date_index - 1] || []) + (dates[date_index + 1] || [])
+      end
+
+    neighbors.select { |id| id != project_id }
+  end
+
+  # Determine the rate for a date on which we have multiple overlapping projects
+  def calculate_multi_project_rate(project_ids)
+    projects = project_ids.map { |project_id| project_index[project_id] }
+
     # If any of the overlapping projects are in a high cost city, we'll use the high cost city rate
     if projects.any? { |project| project.is_high_cost_city? }
       Project::HIGH_COST_CITY_FULL_DAY_RATE 

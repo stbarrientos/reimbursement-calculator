@@ -23,15 +23,18 @@ class Project
     @duration = calculate_duration
   end
 
+  def each_date(&block)
+    duration.times do |date_offest|
+      block.call(start_date + date_offest)
+    end
+  end
+
   def contains_date?(date)
     start_date <= date && end_date >= date
   end
 
   def is_full_day?(date)
     return false unless contains_date?(date)
-
-    # If the duration of the project is only one day, then that day is a full day
-    return true if duration == 1
 
     date != start_date && date != end_date
   end
@@ -47,7 +50,7 @@ class Project
 
   # This method is used to calculate the rate for a single project on a given day.
   # NOTE: This method does not attempt to return the final rate for a project in the context of a set.
-  # See ProjectSet#calculate_total_cost for the logic used to calculate project set total
+  # See ProjectSet#calculate_total_reimbursement for the logic used to calculate project set total
   def solo_rate(date)
     if is_full_day?(date)
       is_high_cost_city? ? HIGH_COST_CITY_FULL_DAY_RATE : LOW_COST_CITY_FULL_DAY_RATE

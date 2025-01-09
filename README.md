@@ -3,6 +3,13 @@
 A simple reimbursement calculator algorithm.
 
 ### Running the project
+TL;DR
+```
+ruby main.rb
+# or if you prefer docker
+docker compose run release
+```
+
 This project can be run from any ruby 3.4.1 (untested in other versions) development environment. Simply run:
 `ruby main.rb`
 from the project root.
