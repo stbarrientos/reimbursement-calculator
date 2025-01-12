@@ -21,6 +21,13 @@ class ProjectSet
       # In the case of a gap between projects, there will be no project ids for the date
       next unless date_project_ids&.any?
 
+      # The first and last days of the project set are always travel days
+      if date_index == 0 || date_index == dates.length - 1
+        daily_total = calculate_forced_travel_day_rate(date_project_ids)
+        reimbursement_total += daily_total
+        next
+      end
+
       # Determine the rate for the day based on if there are multiple projects on the same day.
       # This represents and "overlap"
       daily_total =
@@ -64,7 +71,6 @@ class ProjectSet
     projects.each do |project|
       project.each_date do |date|
         index = date - first_project_set_date
-        # puts "Generating date #{date} for project #{project} (#{index})"
         dates[index] ||= []
         dates[index] << project.object_id
       end
@@ -120,6 +126,19 @@ class ProjectSet
       Project::HIGH_COST_CITY_FULL_DAY_RATE 
     else
       Project::LOW_COST_CITY_FULL_DAY_RATE
+    end
+  end
+
+  # Determine the rate for a travel day. We must account for potential overlaps and use the
+  # appropriate rate
+  def calculate_forced_travel_day_rate(project_ids)
+    projects = project_ids.map { |project_id| project_index[project_id] }
+
+    # If any of the overlapping projects are in a high cost city, we'll use the high cost city rate
+    if projects.any? { |project| project.is_high_cost_city? }
+      Project::HIGH_COST_CITY_TRAVEL_DAY_RATE
+    else
+      Project::LOW_COST_CITY_TRAVEL_DAY_RATE
     end
   end
 end
