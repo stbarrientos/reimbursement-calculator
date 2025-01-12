@@ -1,5 +1,5 @@
 # These services are not meant to be run simultaneously.
-# The dev service is intented for local development, the release service is intented for production
+# The dev service is intended for local development, the release service is intended for "production"
 services:
   dev:
     build:
