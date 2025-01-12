@@ -32,7 +32,7 @@ ts.test "ProjectSet can calculate total cost for multiple projects correctly" do
 end
 
 ts.test "ProjectSet accounts for date neighbors when calculating cost" do
-  # Estimated value: 55
+  # Estimated value: 45
   proj1 = Project.new(start_date: '9/1/2025', end_date: '9/1/2025', city_type: 'Low Cost City')
 
   # Estimated value: 85 + 85 + 85 + 85 = 340
@@ -42,11 +42,11 @@ ts.test "ProjectSet accounts for date neighbors when calculating cost" do
   proj3 = Project.new(start_date: '9/6/2025', end_date: '9/7/2025', city_type: 'Low Cost City')
 
   proj_set = ProjectSet.new(name: 'Test Project Set', projects: [proj1, proj2, proj3])
-  proj_set.calculate_total_reimbursement == 495
+  proj_set.calculate_total_reimbursement == 485
 end
 
 ts.test "ProjectSet accounts for project overlaps when calculating cost" do
-  # Estimated value: 55
+  # Estimated value: 45
   proj1 = Project.new(start_date: '9/1/2025', end_date: '9/3/2025', city_type: 'Low Cost City')
 
   # Estimated value: 85 + 85 + 85 + 85 = 340
@@ -56,7 +56,7 @@ ts.test "ProjectSet accounts for project overlaps when calculating cost" do
   proj3 = Project.new(start_date: '9/5/2025', end_date: '9/7/2025', city_type: 'Low Cost City')
 
   proj_set = ProjectSet.new(name: 'Test Project Set', projects: [proj1, proj2, proj3])
-  proj_set.calculate_total_reimbursement == 495
+  proj_set.calculate_total_reimbursement == 485
 end
 
 ts.test "reimbursements can be correctly calculated from input.json" do
@@ -64,7 +64,7 @@ ts.test "reimbursements can be correctly calculated from input.json" do
   totals = json['sets'].map do |json_set|
     ProjectSet.from_hash(json_set).calculate_total_reimbursement
   end
-  totals == [145, 580, 475, 225]
+  totals == [145, 570, 465, 205]
 end
 
 ts.run
